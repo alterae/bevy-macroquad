@@ -1,4 +1,7 @@
-use bevy::{app, ecs::system, log};
+use bevy::{app::prelude::*, ecs::prelude::*, log};
+use macroquad::prelude::*;
+
+use crate::color;
 
 pub struct Plugin {
     font: Font,
@@ -10,16 +13,17 @@ impl Plugin {
     }
 }
 
-impl app::Plugin for Plugin {
-    fn build(&self, app: &mut app::App) {
+impl bevy::app::Plugin for Plugin {
+    fn build(&self, app: &mut App) {
         app.insert_resource(self.font.clone())
+            .init_resource::<color::Palette>()
             .init_resource::<Console>()
-            .add_systems(app::Startup, init)
-            .add_systems(app::PostUpdate, draw);
+            .add_systems(Startup, init)
+            .add_systems(PostUpdate, draw);
     }
 }
 
-fn init(mut console: system::ResMut<Console>, font: system::Res<Font>) {
+fn init(mut console: ResMut<Console>, font: Res<Font>) {
     console.clear(&font);
 
     log::info!(
@@ -30,18 +34,18 @@ fn init(mut console: system::ResMut<Console>, font: system::Res<Font>) {
     log::info!("Font: {} ({} x {})", font.path, font.width, font.height);
 }
 
-#[derive(Clone, system::Resource)]
+#[derive(Clone, Resource)]
 pub struct Font {
     path: String,
-    texture: macroquad::texture::Texture2D,
+    texture: Texture2D,
     width: f32,
     height: f32,
 }
 
 impl Font {
     pub async fn new(path: &str) -> Self {
-        let texture = macroquad::texture::load_texture(path).await.unwrap();
-        texture.set_filter(macroquad::miniquad::FilterMode::Nearest);
+        let texture = load_texture(path).await.unwrap();
+        texture.set_filter(FilterMode::Nearest);
         let width = texture.width() / 16.;
         let height = texture.height() / 16.;
 
@@ -53,11 +57,11 @@ impl Font {
         }
     }
 
-    fn get_rect(&self, glyph: u8) -> macroquad::math::Rect {
+    fn get_rect(&self, glyph: u8) -> Rect {
         let x = (glyph % 16) as f32 * self.width;
         let y = (glyph / 16) as f32 * self.height;
 
-        macroquad::math::Rect {
+        Rect {
             x,
             y,
             w: self.width,
@@ -66,11 +70,11 @@ impl Font {
     }
 }
 
-#[derive(Default, system::Resource)]
+#[derive(Default, Resource)]
 pub struct Console {
     buffer: Vec<Option<Cell>>,
-    width: usize,
-    height: usize,
+    pub width: usize,
+    pub height: usize,
 }
 
 impl Console {
@@ -82,23 +86,31 @@ impl Console {
         ((idx % self.width) as i32, (idx / self.width) as i32)
     }
 
-    pub fn put_char(&mut self, pos: impl Position, c: impl Copy + TryInto<u8>) {
+    pub fn put_char(
+        &mut self,
+        pos: impl Position,
+        c: impl Copy + TryInto<u8>,
+        fg: color::Color,
+        bg: color::Color,
+    ) {
         let idx = self.pos_to_idx(pos);
 
         self.buffer[idx] = Some(Cell {
             glyph: c.try_into().unwrap_or(0),
+            fg,
+            bg,
         })
     }
 
-    pub fn put_str(&mut self, pos: impl Position, text: &str) {
+    pub fn put_str(&mut self, pos: impl Position, text: &str, fg: color::Color, bg: color::Color) {
         for (i, c) in text.char_indices() {
-            self.put_char((pos.x() + i as i32, pos.y()), c);
+            self.put_char((pos.x() + i as i32, pos.y()), c, fg, bg);
         }
     }
 
     fn clear(&mut self, font: &Font) {
-        let width = (macroquad::window::screen_width() / font.width) as usize;
-        let height = (macroquad::window::screen_height() / font.height) as usize;
+        let width = (screen_width() / font.width) as usize;
+        let height = (screen_height() / font.height) as usize;
 
         self.buffer = vec![None; width * height];
         self.width = width;
@@ -109,6 +121,8 @@ impl Console {
 #[derive(Clone, Copy)]
 struct Cell {
     glyph: u8,
+    fg: color::Color,
+    bg: color::Color,
 }
 
 pub trait Position {
@@ -129,16 +143,27 @@ where
     }
 }
 
-fn draw(mut console: system::ResMut<Console>, font: system::Res<Font>) {
+fn draw(mut console: ResMut<Console>, font: Res<Font>, palette: Res<color::Palette>) {
+    clear_background(palette[color::Black]);
+
     for (idx, cell) in console.buffer.iter().enumerate() {
         if let Some(cell) = cell {
             let (x, y) = console.idx_to_pos(idx);
-            macroquad::texture::draw_texture_ex(
+
+            draw_rectangle(
+                x as f32 * font.width,
+                y as f32 * font.height,
+                font.width,
+                font.height,
+                palette[cell.bg],
+            );
+
+            draw_texture_ex(
                 &font.texture,
                 x as f32 * font.width,
                 y as f32 * font.height,
-                macroquad::color::WHITE,
-                macroquad::texture::DrawTextureParams {
+                palette[cell.fg],
+                DrawTextureParams {
                     source: Some(font.get_rect(cell.glyph)),
                     ..Default::default()
                 },

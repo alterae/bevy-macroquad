@@ -1,30 +1,30 @@
-use bevy::{app, ecs::system, log};
-use macroquad::input;
+use bevy::{app::prelude::*, ecs::prelude::*, log};
+use macroquad::prelude::*;
 
+mod color;
 mod text;
 
 #[macroquad::main(conf)]
 async fn main() {
     let font = text::Font::new("assets/fonts/curses_800x600.png").await;
 
-    let mut app = app::App::new();
+    let mut app = App::new();
     app.add_plugins((bevy::DefaultPlugins, text::Plugin::new(font)))
-        .add_systems(app::Update, hello);
+        .add_systems(Update, fps_display);
 
     loop {
-        if input::is_key_down(input::KeyCode::LeftSuper) && input::is_key_pressed(input::KeyCode::Q)
-        {
+        if is_key_down(KeyCode::LeftSuper) && is_key_pressed(KeyCode::Q) {
             log::info!("Exiting!");
             break;
         }
 
         app.update();
-        macroquad::window::next_frame().await;
+        next_frame().await;
     }
 }
 
-fn conf() -> macroquad::window::Conf {
-    macroquad::window::Conf {
+fn conf() -> Conf {
+    Conf {
         window_title: "Hello, world!".to_owned(),
         window_width: 1280,
         window_height: 720,
@@ -33,9 +33,13 @@ fn conf() -> macroquad::window::Conf {
     }
 }
 
-fn hello(mut console: system::ResMut<text::Console>) {
+fn fps_display(mut console: ResMut<text::Console>) {
     let fps = macroquad::time::get_fps();
 
-    console.put_str((1, 1), "\x03 Hello, world!");
-    console.put_str((1, 2), &format!("FPS: {fps}"))
+    console.put_str(
+        (1, 1),
+        &format!("FPS: {fps}"),
+        color::BrightWhite,
+        color::Black,
+    );
 }
