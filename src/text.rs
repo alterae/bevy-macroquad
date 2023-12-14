@@ -10,18 +10,22 @@ mod font;
 
 pub struct Plugin {
     font: Font,
+    palette: Palette,
 }
 
 impl Plugin {
-    pub fn new(font: Font) -> Self {
-        Self { font }
+    pub fn new(font: Font, palette: impl Into<Option<Palette>>) -> Self {
+        Self {
+            font,
+            palette: palette.into().unwrap_or_default(),
+        }
     }
 }
 
 impl bevy::app::Plugin for Plugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(self.font.clone())
-            .init_resource::<Palette>()
+            .insert_resource(self.palette.clone())
             .init_resource::<Console>()
             .add_systems(Startup, init)
             .add_systems(PostUpdate, console::draw);

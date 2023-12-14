@@ -3,6 +3,9 @@ use macroquad::prelude::*;
 
 use crate::math;
 
+use super::Color;
+
+// TODO: separate UI and game layers
 #[derive(Default, Resource)]
 pub struct Console {
     buffer: Vec<Option<Cell>>,
@@ -71,24 +74,31 @@ pub fn draw(mut console: ResMut<Console>, font: Res<super::Font>, palette: Res<s
         if let Some(cell) = cell {
             let (x, y) = console.idx_to_pos(idx);
 
-            draw_rectangle(
-                x as f32 * font.width,
-                y as f32 * font.height,
-                font.width,
-                font.height,
-                palette[cell.bg],
-            );
+            if cell.bg != Color::Black {
+                draw_texture_ex(
+                    &font.texture,
+                    x as f32 * font.width,
+                    y as f32 * font.height,
+                    palette[cell.bg],
+                    DrawTextureParams {
+                        source: Some(font.get_rect(219)),
+                        ..Default::default()
+                    },
+                );
+            }
 
-            draw_texture_ex(
-                &font.texture,
-                x as f32 * font.width,
-                y as f32 * font.height,
-                palette[cell.fg],
-                DrawTextureParams {
-                    source: Some(font.get_rect(cell.glyph)),
-                    ..Default::default()
-                },
-            );
+            if cell.fg != cell.bg {
+                draw_texture_ex(
+                    &font.texture,
+                    x as f32 * font.width,
+                    y as f32 * font.height,
+                    palette[cell.fg],
+                    DrawTextureParams {
+                        source: Some(font.get_rect(cell.glyph)),
+                        ..Default::default()
+                    },
+                );
+            }
         }
     }
 

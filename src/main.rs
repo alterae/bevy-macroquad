@@ -3,16 +3,20 @@ use macroquad::prelude::*;
 
 use text::Color;
 
+mod config;
 mod math;
 mod text;
 
 #[macroquad::main(conf)]
 async fn main() {
-    let font = text::Font::new("assets/fonts/curses_800x600.png").await;
+    let config = config::Config::new().await;
+
+    let font = text::Font::new(&config.font_path).await;
+    let palette = text::Palette::new(&config.palette_path).await;
 
     let mut app = App::new();
-    app.add_plugins((bevy::DefaultPlugins, text::Plugin::new(font)))
-        .add_systems(Update, fps_display);
+    app.add_plugins((bevy::DefaultPlugins, text::Plugin::new(font, palette)))
+        .add_systems(Update, (fps_display, stress_test.before(fps_display)));
 
     loop {
         if is_key_down(KeyCode::LeftSuper) && is_key_pressed(KeyCode::Q) {
@@ -44,4 +48,12 @@ fn fps_display(mut console: ResMut<text::Console>) {
         Color::BrightWhite,
         Color::Black,
     );
+}
+
+fn stress_test(mut console: ResMut<text::Console>) {
+    for x in 0..console.width {
+        for y in 0..console.height {
+            console.put_char((x, y), '!', Color::random(), Color::random());
+        }
+    }
 }

@@ -1,7 +1,9 @@
 use bevy::ecs::prelude::*;
+use kdl::KdlDocument;
+use macroquad::{prelude::*, rand::ChooseRandom};
 
 #[allow(unused)]
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum Color {
     Black = 0,
     Red,
@@ -22,9 +24,70 @@ pub enum Color {
     BrightWhite,
 }
 
-#[derive(Resource)]
+impl Color {
+    const VARIANTS: [Color; 16] = [
+        Self::Black,
+        Self::Red,
+        Self::Green,
+        Self::Blue,
+        Self::Cyan,
+        Self::Magenta,
+        Self::Yellow,
+        Self::White,
+        Self::BrightBlack,
+        Self::BrightRed,
+        Self::BrightGreen,
+        Self::BrightBlue,
+        Self::BrightCyan,
+        Self::BrightMagenta,
+        Self::BrightYellow,
+        Self::BrightWhite,
+    ];
+
+    pub fn random() -> Self {
+        *Vec::from(Self::VARIANTS).choose().unwrap()
+    }
+}
+
+#[derive(Clone, Resource)]
 pub struct Palette {
     colors: [macroquad::color::Color; 16],
+}
+
+impl Palette {
+    pub async fn new(path: &str) -> Self {
+        let palette = load_string(path).await.unwrap();
+        let palette: KdlDocument = palette.parse().unwrap();
+
+        Self {
+            colors: [
+                "black",
+                "red",
+                "green",
+                "blue",
+                "cyan",
+                "magenta",
+                "yellow",
+                "white",
+                "bright-black",
+                "bright-red",
+                "bright-green",
+                "bright-blue",
+                "bright-cyan",
+                "bright-magenta",
+                "bright-yellow",
+                "bright-white",
+            ]
+            .map(|c| {
+                palette
+                    .get_args(c)
+                    .iter()
+                    .map(|arg| arg.as_i64().unwrap() as u8)
+                    .collect::<Vec<u8>>()
+            })
+            .map(|args| [args[0], args[1], args[2], 255].into()),
+        }
+    }
 }
 
 impl Default for Palette {
