@@ -1,7 +1,9 @@
 use bevy::{app::prelude::*, ecs::prelude::*, log};
 use macroquad::prelude::*;
 
-mod color;
+use text::Color;
+
+mod math;
 mod text;
 
 #[macroquad::main(conf)]
@@ -39,7 +41,7 @@ fn fps_display(mut console: ResMut<text::Console>) {
     console.put_str(
         (1, 1),
         &format!("FPS: {fps}"),
-        color::BrightWhite,
-        color::Black,
+        Color::BrightWhite,
+        Color::Black,
     );
 }

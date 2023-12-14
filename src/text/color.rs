@@ -1,7 +1,5 @@
 use bevy::ecs::prelude::*;
 
-pub use Color::*;
-
 #[allow(unused)]
 #[derive(Clone, Copy)]
 pub enum Color {
