@@ -3,12 +3,12 @@ use bevy::prelude::*;
 use engine::mq;
 
 mod engine;
+mod game;
 
 #[macroquad::main(conf)]
 async fn main() {
     let mut app = App::new();
-    app.add_plugins((bevy::DefaultPlugins, engine::Plugin))
-        .add_systems(Update, engine::stress_test);
+    app.add_plugins((bevy::DefaultPlugins, engine::Plugin, game::Plugin));
 
     loop {
         app.update();

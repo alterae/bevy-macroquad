@@ -27,11 +27,13 @@ pub enum Color {
     BrightMagenta,
     BrightYellow,
     BrightWhite,
+
+    Transparent,
 }
 
 #[allow(unused)]
 impl Color {
-    const VARIANTS: [Color; 16] = [
+    const VARIANTS: [Color; 17] = [
         Self::Black,
         Self::Red,
         Self::Green,
@@ -48,6 +50,7 @@ impl Color {
         Self::BrightMagenta,
         Self::BrightYellow,
         Self::BrightWhite,
+        Self::Transparent,
     ];
 
     pub fn random() -> Self {
@@ -57,7 +60,7 @@ impl Color {
 
 #[derive(Clone, Resource)]
 pub struct Palette {
-    colors: [mq::Color; 16],
+    colors: [mq::Color; 17],
 }
 
 impl Palette {
@@ -88,15 +91,20 @@ impl Palette {
                 "bright-magenta",
                 "bright-yellow",
                 "bright-white",
+                "transparent",
             ]
             .map(|c| {
-                palette
-                    .get_args(c)
-                    .iter()
-                    .map(|arg| arg.as_i64().unwrap() as u8)
-                    .collect::<Vec<u8>>()
+                if c != "transparent" {
+                    palette
+                        .get_args(c)
+                        .iter()
+                        .map(|arg| arg.as_i64().unwrap() as u8)
+                        .collect::<Vec<u8>>()
+                } else {
+                    vec![0, 0, 0, 0]
+                }
             })
-            .map(|args| [args[0], args[1], args[2], 255].into()),
+            .map(|args| [args[0], args[1], args[2], *args.get(3).unwrap_or(&255)].into()),
         }
     }
 }

@@ -29,7 +29,7 @@ fn command_q() {
     }
 }
 
-pub fn stress_test(mut console: ResMut<text::Console>) {
+pub fn _stress_test(mut console: ResMut<text::Console>) {
     for x in 0..console.width {
         for y in 0..console.height {
             console.put_char(

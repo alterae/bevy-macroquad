@@ -80,7 +80,7 @@ pub fn draw(mut console: ResMut<Console>, font: Res<super::Font>, palette: Res<s
         if let Some(cell) = cell {
             let (x, y) = console.idx_to_pos(idx);
 
-            if cell.bg != Color::Black {
+            if cell.bg != Color::Transparent {
                 mq::draw_texture_ex(
                     &font.texture,
                     x as f32 * font.width,
@@ -93,7 +93,7 @@ pub fn draw(mut console: ResMut<Console>, font: Res<super::Font>, palette: Res<s
                 );
             }
 
-            if cell.fg != cell.bg {
+            if cell.fg != cell.bg && cell.fg != Color::Transparent {
                 mq::draw_texture_ex(
                     &font.texture,
                     x as f32 * font.width,
