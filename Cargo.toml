@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 bevy = { version = "0.12.1", default-features = false }
+futures = "0.3.29"
 kdl = "4.6.0"
 macroquad = "0.4.4"

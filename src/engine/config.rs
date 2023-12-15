@@ -1,3 +1,4 @@
+use futures::executor;
 use kdl::{KdlDocument, KdlValue};
 
 use crate::engine::mq;
@@ -9,8 +10,8 @@ pub struct Config {
 }
 
 impl Config {
-    pub async fn new() -> Self {
-        let config = mq::load_string("init.kdl").await.unwrap_or_default();
+    pub fn new() -> Self {
+        let config = executor::block_on(mq::load_string("init.kdl")).unwrap_or_default();
         let config: KdlDocument = config.parse().unwrap();
 
         let font = config

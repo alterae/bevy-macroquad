@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use futures::executor;
 
 use crate::engine::mq;
 
@@ -11,8 +12,8 @@ pub struct Font {
 }
 
 impl Font {
-    pub async fn new(path: &str) -> Self {
-        let texture = mq::load_texture(path).await.unwrap();
+    pub fn new(path: &str) -> Self {
+        let texture = executor::block_on(mq::load_texture(path)).unwrap();
         texture.set_filter(mq::FilterMode::Nearest);
         let width = texture.width() / 16.;
         let height = texture.height() / 16.;

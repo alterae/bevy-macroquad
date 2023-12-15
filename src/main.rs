@@ -6,11 +6,11 @@ mod engine;
 
 #[macroquad::main(conf)]
 async fn main() {
-    let config = engine::Config::new().await;
+    let config = engine::Config::new();
 
-    let font = text::Font::new(&config.font_path).await;
-    let ui_font = text::Font::new(&config.ui_font_path).await;
-    let palette = text::Palette::new(&config.palette_path).await;
+    let font = text::Font::new(&config.font_path);
+    let ui_font = text::Font::new(&config.ui_font_path);
+    let palette = text::Palette::new(&config.palette_path);
 
     let mut app = App::new();
     app.add_plugins((

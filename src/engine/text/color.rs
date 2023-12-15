@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use futures::executor;
 use kdl::KdlDocument;
 
 use crate::engine::mq::{self, rand::ChooseRandom as _};
@@ -57,8 +58,8 @@ pub struct Palette {
 }
 
 impl Palette {
-    pub async fn new(path: &str) -> Self {
-        let palette = mq::load_string(path).await.unwrap();
+    pub fn new(path: &str) -> Self {
+        let palette = executor::block_on(mq::load_string(path)).unwrap();
         let palette: KdlDocument = palette.parse().unwrap();
 
         Self {
