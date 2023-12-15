@@ -1,2 +1,3 @@
-font "curses_800x600.png"
+font "taffer.png"
+ui-font "curses_800x600.png"
 palette "v50.kdl"

@@ -4,10 +4,9 @@ use crate::engine::{math, mq};
 
 use super::Color;
 
-// TODO: separate UI and game layers
 #[derive(Default, Resource)]
 pub struct Console {
-    buffer: Vec<Option<Cell>>,
+    pub buffer: Vec<Option<Cell>>,
     pub width: usize,
     pub height: usize,
 }
@@ -17,7 +16,7 @@ impl Console {
         pos.y() as usize * self.width + pos.x() as usize
     }
 
-    fn idx_to_pos(&self, idx: usize) -> (i32, i32) {
+    pub fn idx_to_pos(&self, idx: usize) -> (i32, i32) {
         ((idx % self.width) as i32, (idx / self.width) as i32)
     }
 

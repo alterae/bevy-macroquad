@@ -4,15 +4,16 @@ pub use bevy::log;
 pub use macroquad::prelude as mq;
 
 pub use config::Config;
+pub use text::ui;
 
 pub mod config;
 pub mod math;
 pub mod text;
 
-fn fps_display(mut console: ResMut<text::Console>) {
+fn fps_display(mut ui: ResMut<ui::UI>) {
     let fps = macroquad::time::get_fps();
 
-    console.put_str(
+    ui.put_str(
         (1, 1),
         &format!("FPS: {fps}"),
         text::Color::BrightWhite,

@@ -9,6 +9,7 @@ pub use font::Font;
 mod color;
 mod console;
 mod font;
+pub mod ui;
 
 pub struct Plugin {
     font: Font,
@@ -34,7 +35,7 @@ impl bevy::app::Plugin for Plugin {
     }
 }
 
-fn init(mut console: ResMut<Console>, font: Res<Font>) {
+pub fn init(mut console: ResMut<Console>, font: Res<Font>) {
     console.clear(&font);
 
     log::info!(
