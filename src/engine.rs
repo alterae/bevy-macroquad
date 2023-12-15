@@ -10,6 +10,18 @@ pub mod config;
 pub mod math;
 pub mod text;
 
+pub mod prelude {
+    pub use super::{
+        log, math,
+        mq::{self, rand::ChooseRandom as _},
+        text::{
+            self,
+            Color::{self, *},
+        },
+        ui, Config,
+    };
+}
+
 fn fps_display(mut ui: ResMut<ui::UI>) {
     let fps = macroquad::time::get_fps();
 

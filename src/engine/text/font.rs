@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use futures::executor;
 
-use crate::engine::{self, log, mq};
+use crate::engine::prelude::*;
 
 #[derive(Clone, Resource)]
 pub struct Font {
@@ -43,7 +43,7 @@ impl Font {
 
 impl FromWorld for Font {
     fn from_world(world: &mut World) -> Self {
-        let config = world.resource::<engine::Config>();
+        let config = world.resource::<Config>();
 
         Self::new(&config.font_path)
     }

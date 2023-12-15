@@ -2,10 +2,7 @@ use bevy::prelude::*;
 use futures::executor;
 use kdl::KdlDocument;
 
-use crate::engine::{
-    self, log,
-    mq::{self, rand::ChooseRandom as _},
-};
+use crate::engine::prelude::*;
 
 #[allow(unused)]
 #[derive(Clone, Copy, PartialEq)]
@@ -119,7 +116,7 @@ impl std::ops::Index<Color> for Palette {
 
 impl FromWorld for Palette {
     fn from_world(world: &mut World) -> Self {
-        let config = world.resource::<engine::Config>();
+        let config = world.resource::<Config>();
 
         Self::new(&config.palette_path)
     }

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::engine::{math, mq};
+use crate::engine::prelude::*;
 
 use super::Color;
 

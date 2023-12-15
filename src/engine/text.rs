@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::engine::log;
+use crate::engine::prelude::*;
 
 pub use color::{Color, Palette};
 pub use console::{draw, Cell, Console};

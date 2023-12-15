@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use engine::mq;
+use engine::prelude::*;
 
 mod engine;
 mod game;

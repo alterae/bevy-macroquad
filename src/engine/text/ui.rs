@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::engine::{self, log, mq};
+use crate::engine::prelude::*;
 
 pub struct Plugin;
 
@@ -21,7 +21,7 @@ struct Font(super::Font);
 
 impl FromWorld for Font {
     fn from_world(world: &mut World) -> Self {
-        let config = world.resource::<engine::Config>();
+        let config = world.resource::<Config>();
 
         Self(super::Font::new(&config.ui_font_path))
     }

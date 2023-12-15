@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::engine::{text::Color, ui};
+use crate::engine::prelude::*;
 
 pub struct Plugin;
 
@@ -58,5 +58,5 @@ fn display_date(date: Res<Date>, mut ui: ResMut<ui::UI>) {
         date.total_years
     );
 
-    ui.put_str(pos, &text, Color::White, Color::Transparent);
+    ui.put_str(pos, &text, White, Transparent);
 }
