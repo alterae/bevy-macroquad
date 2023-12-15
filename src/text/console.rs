@@ -14,7 +14,7 @@ pub struct Console {
 }
 
 impl Console {
-    fn pos_to_idx(&self, pos: impl math::Position) -> usize {
+    fn pos_to_idx(&self, pos: impl math::Vec2) -> usize {
         pos.y() as usize * self.width + pos.x() as usize
     }
 
@@ -24,11 +24,19 @@ impl Console {
 
     pub fn put_char(
         &mut self,
-        pos: impl math::Position,
+        pos: impl math::Vec2,
         c: impl Copy + TryInto<u8>,
         fg: super::Color,
         bg: super::Color,
     ) {
+        if pos.x() < 0
+            || pos.x() >= self.width as i32
+            || pos.y() < 0
+            || pos.y() >= self.height as i32
+        {
+            return;
+        }
+
         let idx = self.pos_to_idx(pos);
 
         self.buffer[idx] = Some(Cell {
@@ -40,7 +48,7 @@ impl Console {
 
     pub fn put_str(
         &mut self,
-        pos: impl math::Position,
+        pos: impl math::Vec2,
         text: &str,
         fg: super::Color,
         bg: super::Color,
@@ -61,10 +69,10 @@ impl Console {
 }
 
 #[derive(Clone, Copy)]
-struct Cell {
-    glyph: u8,
-    fg: super::Color,
-    bg: super::Color,
+pub struct Cell {
+    pub glyph: u8,
+    pub fg: super::Color,
+    pub bg: super::Color,
 }
 
 pub fn draw(mut console: ResMut<Console>, font: Res<super::Font>, palette: Res<super::Palette>) {

@@ -1,17 +1,17 @@
-black 25 25 25 255
-red 187 34 34 255
-green 85 153 85 255
-blue 0 99 177 255
-cyan 77 158 161 255
-magenta 170 51 119 255
-yellow 140 117 100 255
-white 157 174 178 255
+black 25 25 25
+red 187 34 34
+green 85 153 85
+blue 0 99 177
+cyan 77 158 161
+magenta 170 51 119
+yellow 140 117 100
+white 157 174 178
 
-bright-black 91 112 117 255
-bright-red 246 114 128 255
-bright-green 153 238 119 255
-bright-blue 48 165 255 255
-bright-cyan 128 212 215 255
-bright-magenta 255 136 187 255
-bright-yellow 255 255 102 255
-bright-white 255 250 232 255
+bright-black 91 112 117
+bright-red 246 114 128
+bright-green 153 238 119
+bright-blue 48 165 255
+bright-cyan 128 212 215
+bright-magenta 255 136 187
+bright-yellow 255 255 102
+bright-white 255 250 232

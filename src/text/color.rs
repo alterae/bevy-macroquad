@@ -24,6 +24,7 @@ pub enum Color {
     BrightWhite,
 }
 
+#[allow(unused)]
 impl Color {
     const VARIANTS: [Color; 16] = [
         Self::Black,
@@ -45,7 +46,7 @@ impl Color {
     ];
 
     pub fn random() -> Self {
-        *Vec::from(Self::VARIANTS).choose().unwrap()
+        *Vec::from(Self::VARIANTS).choose().unwrap_or(&Self::Black)
     }
 }
 
