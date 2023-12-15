@@ -1,6 +1,7 @@
-use bevy::ecs::prelude::*;
+use bevy::prelude::*;
 use kdl::KdlDocument;
-use macroquad::{prelude::*, rand::ChooseRandom};
+
+use crate::engine::mq::{self, rand::ChooseRandom as _};
 
 #[allow(unused)]
 #[derive(Clone, Copy, PartialEq)]
@@ -52,12 +53,12 @@ impl Color {
 
 #[derive(Clone, Resource)]
 pub struct Palette {
-    colors: [macroquad::color::Color; 16],
+    colors: [mq::Color; 16],
 }
 
 impl Palette {
     pub async fn new(path: &str) -> Self {
-        let palette = load_string(path).await.unwrap();
+        let palette = mq::load_string(path).await.unwrap();
         let palette: KdlDocument = palette.parse().unwrap();
 
         Self {
@@ -118,7 +119,7 @@ impl Default for Palette {
 }
 
 impl std::ops::Index<Color> for Palette {
-    type Output = macroquad::color::Color;
+    type Output = mq::Color;
 
     fn index(&self, color: Color) -> &Self::Output {
         &self.colors[color as usize]

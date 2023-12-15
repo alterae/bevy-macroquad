@@ -1,7 +1,6 @@
-use bevy::{ecs::prelude::*, log, prelude::Deref};
-use macroquad::prelude::*;
+use bevy::prelude::*;
 
-use crate::{math, text};
+use crate::engine::{log, math, text};
 
 #[derive(Clone, Copy, Component)]
 pub struct Position {

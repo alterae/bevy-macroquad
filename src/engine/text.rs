@@ -1,4 +1,6 @@
-use bevy::{app::prelude::*, ecs::prelude::*, log};
+use bevy::prelude::*;
+
+use crate::engine::log;
 
 pub use color::{Color, Palette};
 pub use console::{Cell, Console};

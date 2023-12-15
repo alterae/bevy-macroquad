@@ -1,7 +1,13 @@
-use bevy::{ecs::prelude::*, log};
-use macroquad::prelude::*;
+use bevy::prelude::*;
 
-use crate::text;
+pub use bevy::log;
+pub use macroquad::prelude as mq;
+
+pub use config::Config;
+
+pub mod config;
+pub mod math;
+pub mod text;
 
 pub fn fps_display(mut console: ResMut<text::Console>) {
     let fps = macroquad::time::get_fps();
@@ -16,9 +22,9 @@ pub fn fps_display(mut console: ResMut<text::Console>) {
 
 pub fn command_q() {
     #[cfg(target_os = "macos")]
-    if is_key_down(KeyCode::LeftSuper) && is_key_pressed(KeyCode::Q) {
+    if mq::is_key_down(mq::KeyCode::LeftSuper) && mq::is_key_pressed(mq::KeyCode::Q) {
         log::info!("Command-Q received. Requesting quit...");
-        miniquad::window::request_quit();
+        mq::miniquad::window::request_quit();
     }
 }
 
@@ -27,7 +33,7 @@ pub fn _stress_test(mut console: ResMut<text::Console>) {
         for y in 0..console.height {
             console.put_char(
                 (x, y),
-                rand::rand() as u8,
+                mq::rand::rand() as u8,
                 text::Color::random(),
                 text::Color::random(),
             );

@@ -1,7 +1,6 @@
-use bevy::ecs::prelude::*;
-use macroquad::prelude::*;
+use bevy::prelude::*;
 
-use crate::math;
+use crate::engine::{math, mq};
 
 use super::Color;
 
@@ -59,8 +58,8 @@ impl Console {
     }
 
     pub fn clear(&mut self, font: &super::Font) {
-        let width = (screen_width() / font.width) as usize;
-        let height = (screen_height() / font.height) as usize;
+        let width = (mq::screen_width() / font.width) as usize;
+        let height = (mq::screen_height() / font.height) as usize;
 
         self.buffer = vec![None; width * height];
         self.width = width;
@@ -76,19 +75,19 @@ pub struct Cell {
 }
 
 pub fn draw(mut console: ResMut<Console>, font: Res<super::Font>, palette: Res<super::Palette>) {
-    clear_background(palette[super::Color::Black]);
+    mq::clear_background(palette[super::Color::Black]);
 
     for (idx, cell) in console.buffer.iter().enumerate() {
         if let Some(cell) = cell {
             let (x, y) = console.idx_to_pos(idx);
 
             if cell.bg != Color::Black {
-                draw_texture_ex(
+                mq::draw_texture_ex(
                     &font.texture,
                     x as f32 * font.width,
                     y as f32 * font.height,
                     palette[cell.bg],
-                    DrawTextureParams {
+                    mq::DrawTextureParams {
                         source: Some(font.get_rect(219)),
                         ..Default::default()
                     },
@@ -96,12 +95,12 @@ pub fn draw(mut console: ResMut<Console>, font: Res<super::Font>, palette: Res<s
             }
 
             if cell.fg != cell.bg {
-                draw_texture_ex(
+                mq::draw_texture_ex(
                     &font.texture,
                     x as f32 * font.width,
                     y as f32 * font.height,
                     palette[cell.fg],
-                    DrawTextureParams {
+                    mq::DrawTextureParams {
                         source: Some(font.get_rect(cell.glyph)),
                         ..Default::default()
                     },

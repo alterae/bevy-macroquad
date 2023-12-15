@@ -1,5 +1,6 @@
 use kdl::{KdlDocument, KdlValue};
-use macroquad::prelude::*;
+
+use crate::engine::mq;
 
 pub struct Config {
     pub font_path: String,
@@ -8,7 +9,7 @@ pub struct Config {
 
 impl Config {
     pub async fn new() -> Self {
-        let config = load_string("init.kdl").await.unwrap_or_default();
+        let config = mq::load_string("init.kdl").await.unwrap_or_default();
         let config: KdlDocument = config.parse().unwrap();
 
         let font = config
