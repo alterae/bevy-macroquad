@@ -46,7 +46,10 @@ pub struct Plugin;
 
 impl bevy::app::Plugin for Plugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, command_q)
+        app.init_resource::<Config>()
+            .add_plugins(text::Plugin)
+            .add_plugins(ui::Plugin)
+            .add_systems(Update, command_q)
             .add_systems(PostUpdate, fps_display.before(text::draw));
     }
 }

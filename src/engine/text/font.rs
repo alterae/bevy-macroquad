@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use futures::executor;
 
-use crate::engine::mq;
+use crate::engine::{self, log, mq};
 
 #[derive(Clone, Resource)]
 pub struct Font {
@@ -13,7 +13,9 @@ pub struct Font {
 
 impl Font {
     pub fn new(path: &str) -> Self {
-        let texture = executor::block_on(mq::load_texture(path)).unwrap();
+        let texture = executor::block_on(mq::load_texture(path))
+            .map_err(|e| log::error!("Error loading font {path}: {e}"))
+            .unwrap();
         texture.set_filter(mq::FilterMode::Nearest);
         let width = texture.width() / 16.;
         let height = texture.height() / 16.;
@@ -36,5 +38,13 @@ impl Font {
             w: self.width,
             h: self.height,
         }
+    }
+}
+
+impl FromWorld for Font {
+    fn from_world(world: &mut World) -> Self {
+        let config = world.resource::<engine::Config>();
+
+        Self::new(&config.font_path)
     }
 }

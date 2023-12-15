@@ -11,24 +11,12 @@ mod console;
 mod font;
 pub mod ui;
 
-pub struct Plugin {
-    font: Font,
-    palette: Palette,
-}
-
-impl Plugin {
-    pub fn new(font: Font, palette: impl Into<Option<Palette>>) -> Self {
-        Self {
-            font,
-            palette: palette.into().unwrap_or_default(),
-        }
-    }
-}
+pub struct Plugin;
 
 impl bevy::app::Plugin for Plugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(self.font.clone())
-            .insert_resource(self.palette.clone())
+        app.init_resource::<Font>()
+            .init_resource::<Palette>()
             .init_resource::<Console>()
             .add_systems(Startup, init)
             .add_systems(PostUpdate, console::draw);

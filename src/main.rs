@@ -1,25 +1,14 @@
 use bevy::prelude::*;
 
-use engine::{mq, text, ui};
+use engine::mq;
 
 mod engine;
 
 #[macroquad::main(conf)]
 async fn main() {
-    let config = engine::Config::new();
-
-    let font = text::Font::new(&config.font_path);
-    let ui_font = text::Font::new(&config.ui_font_path);
-    let palette = text::Palette::new(&config.palette_path);
-
     let mut app = App::new();
-    app.add_plugins((
-        bevy::DefaultPlugins,
-        engine::Plugin,
-        text::Plugin::new(font, palette),
-        ui::Plugin::new(ui_font),
-    ))
-    .add_systems(Update, engine::stress_test);
+    app.add_plugins((bevy::DefaultPlugins, engine::Plugin))
+        .add_systems(Update, engine::stress_test);
 
     loop {
         app.update();

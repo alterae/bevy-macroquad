@@ -1,20 +1,12 @@
 use bevy::prelude::*;
 
-use crate::engine::{log, mq};
+use crate::engine::{self, log, mq};
 
-pub struct Plugin {
-    font: Font,
-}
-
-impl Plugin {
-    pub fn new(font: super::Font) -> Self {
-        Self { font: Font(font) }
-    }
-}
+pub struct Plugin;
 
 impl bevy::app::Plugin for Plugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(self.font.clone())
+        app.init_resource::<Font>()
             .init_resource::<UI>()
             .add_systems(Startup, init)
             .add_systems(PostUpdate, draw.after(super::draw));
@@ -26,6 +18,14 @@ pub struct UI(super::Console);
 
 #[derive(Clone, Deref, Resource)]
 struct Font(super::Font);
+
+impl FromWorld for Font {
+    fn from_world(world: &mut World) -> Self {
+        let config = world.resource::<engine::Config>();
+
+        Self(super::Font::new(&config.ui_font_path))
+    }
+}
 
 fn init(mut ui: ResMut<UI>, font: Res<Font>) {
     ui.clear(&font);
