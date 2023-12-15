@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::engine::log;
 
 pub use color::{Color, Palette};
-pub use console::{Cell, Console};
+pub use console::{draw, Cell, Console};
 pub use font::Font;
 
 mod color;

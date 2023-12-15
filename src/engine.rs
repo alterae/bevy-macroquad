@@ -9,7 +9,7 @@ pub mod config;
 pub mod math;
 pub mod text;
 
-pub fn fps_display(mut console: ResMut<text::Console>) {
+fn fps_display(mut console: ResMut<text::Console>) {
     let fps = macroquad::time::get_fps();
 
     console.put_str(
@@ -20,7 +20,7 @@ pub fn fps_display(mut console: ResMut<text::Console>) {
     );
 }
 
-pub fn command_q() {
+fn command_q() {
     #[cfg(target_os = "macos")]
     if mq::is_key_down(mq::KeyCode::LeftSuper) && mq::is_key_pressed(mq::KeyCode::Q) {
         log::info!("Command-Q received. Requesting quit...");
@@ -28,7 +28,7 @@ pub fn command_q() {
     }
 }
 
-pub fn _stress_test(mut console: ResMut<text::Console>) {
+pub fn stress_test(mut console: ResMut<text::Console>) {
     for x in 0..console.width {
         for y in 0..console.height {
             console.put_char(
@@ -38,5 +38,14 @@ pub fn _stress_test(mut console: ResMut<text::Console>) {
                 text::Color::random(),
             );
         }
+    }
+}
+
+pub struct Plugin;
+
+impl bevy::app::Plugin for Plugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, command_q)
+            .add_systems(PostUpdate, fps_display.before(text::draw));
     }
 }

@@ -13,13 +13,14 @@ async fn main() {
     let palette = text::Palette::new(&config.palette_path).await;
 
     let mut app = App::new();
-    app.add_plugins((bevy::DefaultPlugins, text::Plugin::new(font, palette)))
-        .add_systems(Startup, player::spawn)
-        .add_systems(PreUpdate, engine::_stress_test)
-        .add_systems(
-            Update,
-            (engine::command_q, engine::fps_display, player::render),
-        );
+    app.add_plugins((
+        bevy::DefaultPlugins,
+        text::Plugin::new(font, palette),
+        engine::Plugin,
+    ))
+    .add_systems(Startup, player::spawn)
+    .add_systems(PreUpdate, engine::stress_test)
+    .add_systems(Update, player::render);
 
     loop {
         app.update();
