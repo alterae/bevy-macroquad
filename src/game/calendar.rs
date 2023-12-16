@@ -80,6 +80,7 @@ impl Date {
 
 impl std::fmt::Display for Date {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let second = self.current_second();
         let minute = self.current_minute();
         let hour = self.current_hour();
         let sol = self.current_sol();
@@ -95,7 +96,7 @@ impl std::fmt::Display for Date {
 
         write!(
             f,
-            "{hour:02}:{minute:02}, {tensol}-{sol} {season} {year} AL"
+            "{hour:02}:{minute:02}:{second:02}, {tensol}-{sol} {season} {year} AL"
         )
     }
 }
