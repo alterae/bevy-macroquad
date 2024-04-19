@@ -11,6 +11,7 @@ pub mod math;
 pub mod text;
 
 pub mod prelude {
+    #[allow(unused_imports)]
     pub use super::{
         log, math,
         mq::{self, rand::ChooseRandom as _},

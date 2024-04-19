@@ -3,6 +3,7 @@ use bevy::prelude::*;
 use crate::engine::prelude::*;
 
 pub use color::{Color, Palette};
+#[allow(unused_imports)]
 pub use console::{draw, Cell, Console};
 pub use font::Font;
 
