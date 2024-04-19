@@ -10,7 +10,7 @@ A little program frankensteining together Bevy and Macroquad. Fairly specificall
   - game.rs :: root of the game module, which contains a skeleton "game" (no actual gameplay)
   - game/ :: contains "game" code
     - calendar.rs :: the "game" calendar system
-  - engine.rs :: root of the engine module. contains the prelude to organize everything, including re-exporting a lot of macroquad stuff. **enable the stress_test system in order to stress test the rendering**
+  - engine.rs :: root of the engine module. contains the prelude to organize everything, including re-exporting a lot of macroquad stuff. **enable the `stress_test` system in order to stress test the rendering**
   - engine/ :: "engine" code that is theoretically reusable
     - config.rs :: handles config loading to set the fonts and color palette
     - math.rs :: miscellaneous vector-y traits and stuff, to make some APIs nicer
