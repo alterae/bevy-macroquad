@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = { version = "0.12.1", default-features = false }
+bevy = { version = "0.13", default-features = false }
 futures = "0.3.29"
 kdl = "4.6.0"
-macroquad = "0.4.4"
+macroquad = "0.4.5"
